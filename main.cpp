@@ -35,7 +35,7 @@
 
 #include "./Functions/Create/Customer/customer.h"
 #include "./Functions/Read/Customer/customer.h"
-
+#include "./Functions/Delete/Customer/customer.h"
 
 #include "./Functions/Read/Vehicle/vehicle.h"
 #include "./Functions/Read/Options/options.h"
@@ -66,13 +66,14 @@ public:
 
     // Function Defs Interaction Events
     void OnMenuSelect(wxCommandEvent& event);
-    void OnSubmit(wxCommandEvent& event);
+    void OnSubmitEdit(wxCommandEvent& event);
     void UpdateDatabaseForRow(int row);
 
-    void OnCreate(wxCommandEvent& event);
+    void OnSubmitCreate(wxCommandEvent& event);
     void OnAddRow(wxCommandEvent& event);
     void OnDeleteRow(wxCommandEvent& event);
     void OnRightClick(wxGridEvent& event);
+    void OnContextMenuClose(wxMenuEvent& event);
     void OnEditRow(wxCommandEvent& event);
     void CreateDatabaseRow(int row);
 
@@ -98,6 +99,9 @@ public:
     wxComboBox* makeModelYearDropdown;
     std::vector<std::string> fetchedVehiclesVIN;
 
+    // Color Customization
+    wxColour customHighlightColor;
+
 private:
     Session *session;     // Use a pointer for session ... 
     wxPanel *mainPanel;   // we will be passing these pointer variables to 
@@ -113,6 +117,7 @@ private:
     const int ID_DeleteRow = wxNewId();
 
     int currentRow = -1;  // Add a member variable to store the current selected or interacting row
+    int currentCol = -1;
 
     // Memory for row colors and rows that are currently selected for edit
     wxColour originalColor;
@@ -149,6 +154,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     ConnectToDatabase(); // Connect to the database and create the view
     std::cout<< "Connected to Database (async)" << std::endl;
+
+    // Set colors
+    customHighlightColor.SetRGB(0xF3FCF9); // Hexadecimal RGB
 }
 
 // 2. Database Connection
@@ -308,13 +316,21 @@ void MyFrame::OnRightClick(wxGridEvent& event) {
     position = ScreenToClient(position);
 
     currentRow = event.GetRow();  // Store the current row
+    currentCol = event.GetCol(); // Store the current cell
+    // Enable editing for the selected row
+    for (int col = 0; col < grid->GetNumberCols(); ++col) {
+        grid->SetCellBackgroundColour(currentRow, col, customHighlightColor);
+        grid->Refresh();
+    }
     wxMenu menu;
     menu.Append(ID_EditRow, "Edit Row");
     menu.Append(ID_DeleteRow, "Delete Row"); // Add this line
+    
 
     // Bind event for menu item
     Bind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnEditRow, this, ID_EditRow);
     Bind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnDeleteRow, this, ID_DeleteRow); // Add this line
+    Bind(wxEVT_MENU_CLOSE, &MyFrame::OnContextMenuClose, this);  // Bind the menu close event
 
     PopupMenu(&menu, position);
 }
@@ -322,14 +338,24 @@ void MyFrame::OnRightClick(wxGridEvent& event) {
 // 5a1. ContextMenu Event 1 - EDIT
 void MyFrame::OnEditRow(wxCommandEvent& event) {
 
-    wxColour highlightColor = *wxLIGHT_GREY; 
+
     originalColor = grid->GetCellBackgroundColour(currentRow, 0);
 
 
     // Enable editing for the selected row
     for (int col = 0; col < grid->GetNumberCols(); ++col) {
         grid->SetReadOnly(currentRow, col, false);
-        grid->SetCellBackgroundColour(currentRow, col, highlightColor);
+        grid->SetCellBackgroundColour(currentRow, col, customHighlightColor);
+    }
+
+    if (currentRow >= 0 && currentRow < grid->GetNumberRows() &&
+        currentCol >= 0 && currentCol < grid->GetNumberCols()) {
+        
+        // Set the grid cursor to the specified cell
+        grid->SetGridCursor(currentRow, currentCol);
+
+        // Enable editing on this cell
+        grid->EnableCellEditControl();
     }
 
     editedRows.push_back(currentRow); // Update lastEditedRow
@@ -348,12 +374,18 @@ void MyFrame::OnEditRow(wxCommandEvent& event) {
     submitButton->SetSize(buttonX, buttonY, submitButton->GetSize().GetWidth(), rect.GetHeight());
 
     // Bind the event handler for the button
-    submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnSubmit, this);
+    submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnSubmitEdit, this);
 }
 
 // 5a2. Submit Action/Button OnEdit - EDIT
-void MyFrame::OnSubmit(wxCommandEvent& event) {
-    menuList->SetFocus();
+void MyFrame::OnSubmitEdit(wxCommandEvent& event) {
+    if (grid->IsCellEditControlEnabled()) {
+        // Save the current value in the edit control
+        grid->SaveEditControlValue();
+
+        // End the editing session
+        grid->DisableCellEditControl();
+    }
     wxButton* button = dynamic_cast<wxButton*>(event.GetEventObject());
     int row = *static_cast<int*>(button->GetClientData());
     
@@ -380,8 +412,24 @@ void MyFrame::OnDeleteRow(wxCommandEvent& event) {
         DeleteSaleRecord(session, saleId);
         grid->DeleteRows(currentRow, 1); // Remove the row from the grid
     }
+    else if(selectedOption == "Customers"){
+        int custId = wxAtoi(grid->GetCellValue(currentRow, 0));
+        DeleteCustomerRecord(session, custId);
+        grid->DeleteRows(currentRow, 1); // Remove the row from the grid
+    }
 }
 
+// 5c. ContextMenu OnClose
+void MyFrame::OnContextMenuClose(wxMenuEvent& event) {
+    // Deselect the row
+    for (int col = 0; col < grid->GetNumberCols(); ++col) {
+        grid->SetCellBackgroundColour(currentRow, col, originalColor);
+        grid->Refresh();
+    }
+
+    // Unbind the event to avoid it affecting other menus
+    Unbind(wxEVT_MENU_CLOSE, &MyFrame::OnContextMenuClose, this);
+}
 
 // 6.
 // UPDATE
@@ -401,6 +449,19 @@ void MyFrame::UpdateDatabaseForRow(int row) {
     // Call the update function
     UpdateSaleRow(session, saleId, empId, custId, vin, price, saleDateString);
     }
+    // else if(selectedOption == "Customers"){
+
+    // // Extract values from the grid
+    // int saleId = wxAtoi(grid->GetCellValue(row, 0));
+    // int empId = wxAtoi(grid->GetCellValue(row, 1));
+    // int custId = wxAtoi(grid->GetCellValue(row, 2));
+    // std::string vin = grid->GetCellValue(row, 3).ToStdString();
+    // double price = wxAtof(grid->GetCellValue(row, 4));
+    // std::string saleDateString = grid->GetCellValue(row, 5).ToStdString();
+
+    // // Call the update function
+    // UpdateCustomerRow(session, saleId, empId, custId, vin, price, saleDateString);
+    // }
 }
 
 
@@ -426,13 +487,20 @@ void MyFrame::OnAddRow(wxCommandEvent& event) {
     submitButton->SetSize(buttonX, buttonY, submitButton->GetSize().GetWidth(), rect.GetHeight());
 
     // Bind the event handler for the button
-    submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnCreate, this);
+    submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnSubmitCreate, this);
     // ------
 
 }
 
-// 7a. Submit Action/Button OnCreate - CREATE
-void MyFrame::OnCreate(wxCommandEvent& event) {
+// 7a. Submit Action/Button OnSubmitCreate - CREATE
+void MyFrame::OnSubmitCreate(wxCommandEvent& event) {
+    if (grid->IsCellEditControlEnabled()) {
+        // Save the current value in the edit control
+        grid->SaveEditControlValue();
+
+        // End the editing session
+        grid->DisableCellEditControl();
+    }
     wxButton* button = dynamic_cast<wxButton*>(event.GetEventObject());
     int row = *static_cast<int*>(button->GetClientData());
     
@@ -476,6 +544,7 @@ void MyFrame::CreateDatabaseRow(int row) {
         std::string address = grid->GetCellValue(row, 4).ToStdString();
 
         CreateCustomerRow(session, customer_id, name, phone_number, email, address);
+        cout << address << endl;
     }
 }
 
@@ -533,7 +602,7 @@ void MyFrame::OnMakeSale(wxCommandEvent& event) {
     salesFormPanel->SetBackgroundColour(*wxWHITE); // You can replace wxWHITE with any wxColour
     
     // Create Panel Title Label
-    wxStaticText* title = new wxStaticText(salesFormPanel, wxID_ANY, wxT("     New Sale"));
+    wxStaticText* title = new wxStaticText(salesFormPanel, wxID_ANY, wxT("         New Sale"));
         // Create a wxFont object
     wxFont titleFont(16,             // font size
                     wxFONTFAMILY_DEFAULT, // font family - default is okay for generic purpose
@@ -591,9 +660,6 @@ void MyFrame::OnMakeSale(wxCommandEvent& event) {
     customerNameTextCtrl = new wxTextCtrl(salesFormPanel, wxID_ANY);
     salesFormSizer2->Add(customerNameTextCtrl, 0, wxEXPAND | wxALL, 5);
 
-    priceTextCtrl = new wxTextCtrl(salesFormPanel, wxID_ANY);
-    salesFormSizer3->Add(priceTextCtrl, 0, wxEXPAND | wxALL, 5);
-
     phoneTextCtrl = new wxTextCtrl(salesFormPanel, wxID_ANY);
     salesFormSizer2->Add(phoneTextCtrl, 0, wxEXPAND | wxALL, 5);
 
@@ -603,7 +669,11 @@ void MyFrame::OnMakeSale(wxCommandEvent& event) {
     addressTextCtrl = new wxTextCtrl(salesFormPanel, wxID_ANY);
     salesFormSizer2->Add(addressTextCtrl, 0, wxEXPAND | wxALL, 5);
 
+    priceTextCtrl = new wxTextCtrl(salesFormPanel, wxID_ANY);
+    salesFormSizer3->Add(priceTextCtrl, 0, wxEXPAND | wxALL, 5);
+
     // Set placeholder text
+    makeModelYearDropdown->SetHint(wxT("Vehicle"));
     customerNameTextCtrl->SetHint(wxT("Customer Name"));
 
     // Do the same for other wxTextCtrl elements
@@ -626,7 +696,7 @@ void MyFrame::OnMakeSale(wxCommandEvent& event) {
     salesFormSizerGroup->Add(salesFormSizer3, 1, wxEXPAND | wxALL, 5);
 
     salesFormSizerWrapper->Add(title, 0, wxTOP, 20); // wxCENTER will center the text, wxALL adds a border
-    salesFormSizerWrapper->Add(salesFormSizerGroup, 1,  wxEXPAND | wxALL, 5);
+    salesFormSizerWrapper->Add(salesFormSizerGroup, 1,  wxEXPAND | wxLEFT | wxRIGHT, 25);
     // Set the sizer for the sales form panel
     salesFormPanel->SetSizer(salesFormSizerWrapper);
 

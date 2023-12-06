@@ -18,6 +18,7 @@ SRC = main.cpp \
 	  Functions/Read/Inventory/inventory.cpp \
 	  Functions/Update/Sale/sale.cpp \
 	  Functions/Delete/Sale/sale.cpp \
+	  Functions/Delete/Customer/customer.cpp \
 	  Functions/Create/Sale/sale.cpp \
 	  Functions/Create/Customer/customer.cpp \
       # Add other .cpp files here

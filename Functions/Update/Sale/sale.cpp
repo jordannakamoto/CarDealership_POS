@@ -27,9 +27,6 @@ void UpdateSaleRow(Session* session,
         // Check if the update was successful
         if (result.getAffectedItemsCount() == 0) {
             std::cerr << "Error: No rows were updated." << std::endl;
-            wxMessageDialog dialog(nullptr, wxString("No Rows were ") + err.what(), 
-                               "Error", wxOK | wxICON_ERROR);
-            dialog.ShowModal();
         } else {
             std::cout << "Successfully updated the row." << std::endl;
         }

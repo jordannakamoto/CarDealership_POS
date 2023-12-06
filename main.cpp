@@ -25,13 +25,13 @@
 #include <iostream>
 #include <mysqlx/xdevapi.h>
 
-#include "./Functions/Read/Sale/sale.h"
 #include "./Functions/Read/Employee/employee.h"
 #include "./Functions/Read/Customer/customer.h"
 #include "./Functions/Read/Vehicle/vehicle.h"
 
+#include "./Functions/Create/Sale/sale.h"
+#include "./Functions/Read/Sale/sale.h"
 #include "./Functions/Update/Sale/sale.h"
-
 #include "./Functions/Delete/Sale/sale.h"
 #include <vector>
 
@@ -54,12 +54,16 @@ public:
     void OnMenuSelect(wxCommandEvent& event);
     void OnSubmit(wxCommandEvent& event);
     void UpdateDatabaseForRow(int row);
-    
+
+    void OnCreate(wxCommandEvent& event);
     void OnAddRow(wxCommandEvent& event);
     void OnDeleteRow(wxCommandEvent& event);
     void OnRightClick(wxGridEvent& event);
     void OnEditRow(wxCommandEvent& event);
+    void CreateDatabaseRow(int row);
 
+
+    // UI Helpers
     void PositionAddRowButton(wxButton* button);
     void OnResize(wxSizeEvent& event);
 
@@ -110,11 +114,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 // 2. Database Connection
 void MyFrame::ConnectToDatabase() {
+    wxString username = wxGetTextFromUser("Enter your MySQL username:", "MySQL Username", "root");
+    wxString password = wxGetPasswordFromUser("Enter your MySQL password:", "MySQL Password");
+
     try {
-        session = new Session("mysqlx://root:YOURPASSWORDHERE@127.0.0.1");
+        // Construct the connection string with the provided username and password
+        wxString connectionString = "mysqlx://" + username + ":" + password + "@127.0.0.1";
+        session = new Session(connectionString.ToStdString());
+
         cout << "Connection successful!" << endl;
         mainPanel->Show(); // Show the main panel after successful connection
-        CreateNewView(); // Create and show the new view
+        CreateNewView();   // Create and show the new view
     }
     catch (const mysqlx::Error &err) {
         wxMessageBox(wxString(err.what()), "Error", wxOK | wxICON_ERROR);
@@ -185,6 +195,13 @@ void MyFrame::OnMenuSelect(wxCommandEvent& event) {
     }
     grid->AutoSizeColumns();
     grid->Bind(wxEVT_GRID_CELL_RIGHT_CLICK, &MyFrame::OnRightClick, this);
+    // Create the "Add Row" button
+    addRowButton = new wxButton(mainPanel, wxID_ANY, "Add New Row", wxDefaultPosition, wxDefaultSize);
+
+    addRowButton->Bind(wxEVT_BUTTON, &MyFrame::OnAddRow, this);
+
+    // Position the button in the bottom-right corner of the frame
+    PositionAddRowButton(addRowButton);
 }
 
 // 5. ContextMenu Event Handler
@@ -298,7 +315,62 @@ void MyFrame::OnAddRow(wxCommandEvent& event) {
     currentRow = newRow;
     // Finish this... add a new submit function that is similar but different to the edit one
 
+    // Create the "Submit" button for the new row
+    wxButton* submitButton = new wxButton(grid, wxID_ANY, "Submit", wxDefaultPosition, wxDefaultSize);
+    submitButton->SetClientData(new int(currentRow)); // Store the row index
+
+    // Position the button at the end of the new row
+    wxRect rect = grid->CellToRect(currentRow, grid->GetNumberCols() - 1);
+    int buttonX = rect.GetX() + rect.GetWidth() + 85; // Adjust X position
+    int buttonY = rect.GetY() + 30; // Adjust Y position
+    submitButton->SetSize(buttonX, buttonY, submitButton->GetSize().GetWidth(), rect.GetHeight());
+
+    // Bind the event handler for the button
+    submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnCreate, this);
+
 }
+
+// 7a. Submit Action/Button OnCreate - CREATE
+void MyFrame::OnCreate(wxCommandEvent& event) {
+    wxButton* button = dynamic_cast<wxButton*>(event.GetEventObject());
+    int row = *static_cast<int*>(button->GetClientData());
+    
+    // Update the database with the new values from the edited row
+    CreateDatabaseRow(row);
+
+    // Revert the row color to its original and set the row to read-only
+    for (int col = 0; col < grid->GetNumberCols(); ++col) {
+        grid->SetReadOnly(row, col, true);
+    }
+
+    // Refresh the grid
+    grid->ForceRefresh();
+
+    // Hide or destroy the submit button
+    button->Destroy();
+}
+
+// 7b.
+// CREATE
+// (Called by 7a. - CREATE on CREATE)
+void MyFrame::CreateDatabaseRow(int row) {
+
+    if(selectedOption == "Sales"){
+
+    // Extract values from the grid
+    int saleId = wxAtoi(grid->GetCellValue(row, 0));
+    int empId = wxAtoi(grid->GetCellValue(row, 1));
+    int custId = wxAtoi(grid->GetCellValue(row, 2));
+    std::string vin = grid->GetCellValue(row, 3).ToStdString();
+    double price = wxAtof(grid->GetCellValue(row, 4));
+    std::string saleDateString = grid->GetCellValue(row, 5).ToStdString();
+
+    // Call the update function
+    CreateSaleRow(session, saleId, empId, custId, vin, price, saleDateString);
+    }
+}
+
+
 
 
 // 8. Draw "Add New Row" Button to Canvas and Reposition on App Window Resize

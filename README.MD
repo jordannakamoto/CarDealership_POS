@@ -34,10 +34,10 @@ https://github.com/mysql/mysql-connector-cpp
    - xDevAPI Docs: https://dev.mysql.com/doc/dev/connector-cpp/latest/group__devapi.html
 
 3. Download http://wxwidgets.org, the GUI library.
-  - on MacOSX this is most easily done through Homebrew Package Manager
-  - once again, this library has been linked in the Makefile for building on M1 Mac filesystem as documented here:
-  - https://wiki.wxwidgets.org/Wx-Config
-  - tutorial: https://www.youtube.com/watch?v=kPB5Y6ef9dw&list=PL0qQTroQZs5suCJzJYndeBQjLZ4T6q_H-
+   - on MacOSX this is most easily done through Homebrew Package Manager
+   - once again, this library has been linked in the Makefile for building on M1 Mac filesystem as documented here:
+   - https://wiki.wxwidgets.org/Wx-Config
+   - tutorial: https://www.youtube.com/watch?v=kPB5Y6ef9dw&list=PL0qQTroQZs5suCJzJYndeBQjLZ4T6q_H-
 
 Note: Makefile is also using clang c++ compiler which is default on M1 Mac.
 

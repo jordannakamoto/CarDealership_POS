@@ -8,8 +8,8 @@ Simple app with a UI that demonstrates a cpp program that interacts local mysql 
 - [Car Dealership App - 355 Databases Project](#car-dealership-app---355-databases-project)
   - [Table of Contents](#table-of-contents)
   - [Getting Started / Installation](#getting-started--installation)
-  - [Development](#development)
   - [Running the App](#running-the-app)
+  - [Development](#development)
   - [Authors](#authors)
       - [Jordan Nakamoto](#jordan-nakamoto)
   - [License](#license)
@@ -46,6 +46,14 @@ Note: Makefile is also using clang c++ compiler which is default on M1 Mac.
   Makefile       - for compiling and building
 ```
 
+## Running the App
+
+* Commands from VSCode integrated terminal:
+  ```
+    make
+    ./app
+  ```
+
 ## Development
 
 Intended basic functionality is implemented for the sale data type. For other data types, only read is implemented so the project can be extended.
@@ -55,19 +63,11 @@ TODO:
 - make a panel for creating a new sale
 - better UI for information based on its application value. I.E. make the employee name more accessible throughout the UX than their ID or Address.
 
-## Running the App
-
-* Commands from VSCode integrated terminal:
-  ```
-    make
-    ./app
-  ```
 
 ## Authors
 
 #### Jordan Nakamoto
 * [GitHub]
-* [LinkedIn]
 
 ## License
 

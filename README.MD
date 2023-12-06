@@ -19,7 +19,7 @@ Simple app with a native Desktop UI that demonstrates a cpp program that interac
 
 ## Getting Started / Installation
 
-If you haven't installed mysql locally, please do so. Additionally, I am using mycli as my interface in iTerm2 to interact with mysql from a Mac Terminal.
+If you haven't installed mysql locally, please do so. Additionally, I am using mycli as my command line in iTerm2 to interact with mysql from a Mac Terminal.
 
 Clone GitHub project and install dependency libraries on your computer.
 
@@ -38,6 +38,8 @@ https://github.com/mysql/mysql-connector-cpp
    - once again, this library has been linked in the Makefile for building on M1 Mac filesystem as documented here:
    - https://wiki.wxwidgets.org/Wx-Config
    - tutorial: https://www.youtube.com/watch?v=kPB5Y6ef9dw&list=PL0qQTroQZs5suCJzJYndeBQjLZ4T6q_H-
+
+4. Once the program is can make and compile, set up your source data by copying and pasting the contents of the SQLCode folder into your mysql command line.
 
 Note: Makefile is also using clang c++ compiler which is default on M1 Mac.
 

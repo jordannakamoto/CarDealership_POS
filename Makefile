@@ -9,11 +9,12 @@ CXX = clang++ -stdlib=libc++
 
 # Define your source files
 SRC = main.cpp \
- 		Functions/Helpers/helpers.cpp \
+ 	  Functions/Helpers/helpers.cpp \
       Functions/Read/Sale/sale.cpp \
 	  Functions/Read/Employee/employee.cpp \
 	  Functions/Read/Vehicle/vehicle.cpp \
 	  Functions/Read/Customer/customer.cpp \
+	  Functions/Read/Options/options.cpp \
 	  Functions/Update/Sale/sale.cpp \
 	  Functions/Delete/Sale/sale.cpp \
 	  Functions/Create/Sale/sale.cpp \

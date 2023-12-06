@@ -4,6 +4,12 @@ Jordan Nakamoto
 #Project Description#
 An app to manage the inventory of a car dealership. Local MYSQL database connected to CPP program.
 
+#Resources#
+CPP Connctor API Documentation
+https://dev.mysql.com/doc/dev/connector-cpp/latest/group__devapi.html
+WxWidgets
+http://wxwidgets.org
+
 #Installation Instructions#
 
 1. Setup Oracle mysqlcppconnector

@@ -39,3 +39,19 @@ CREATE TABLE Sale (
     FOREIGN KEY (Cust_ID) REFERENCES Customer(Customer_ID),
     FOREIGN KEY (VIN) REFERENCES Vehicle(VIN)
 );
+
+CREATE TABLE Inventory (
+    Inventory_ID INT PRIMARY KEY,
+    Quantity_Per_Vehicle CHAR(10),
+    Model_Info CHAR(255)
+);
+
+-- Option type is called Options because option is a key word in mysql
+CREATE TABLE Options (
+    VIN VARCHAR(17) PRIMARY KEY,
+    Engine CHAR(255),
+    Transmission CHAR(255),
+    Drive_Train CHAR(255),
+    Color CHAR(255),
+    FOREIGN KEY (VIN) REFERENCES Vehicle(VIN)
+);

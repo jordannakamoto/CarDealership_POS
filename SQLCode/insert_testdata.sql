@@ -17,3 +17,15 @@ INSERT INTO Sale (Sale_ID, Emp_ID, Cust_ID, VIN, Price, Sale_Date) VALUES
 (1001, 1, 101, '1HGBH41JXMN109186', 20000.00, '2023-03-01'),
 (1002, 2, 102, 'JH4KA7660MC000000', 18000.00, '2023-03-02'),
 (1003, 3, 103, '2HGES267XNH590480', 22000.00, '2023-03-03');
+
+INSERT INTO Inventory (Inventory_ID, Quantity_Per_Vehicle, Model_Info)
+VALUES
+    (1, '5', 'Standard model with basic features'),
+    (2, '3', 'Upgraded model with leather seats'),
+    (3, '7', 'Luxury model with advanced technology');
+
+INSERT INTO Options (VIN, Engine, Transmission, Drive_Train, Color)
+VALUES
+    ('1HGBH41JXMN109186', '2.0L 4-cylinder', 'Automatic', 'Front-Wheel Drive', 'Silver'),
+    ('JH4KA7660MC000000', '1.8L 4-cylinder', 'Automatic', 'Front-Wheel Drive', 'Blue'),
+    ('2HGES267XNH590480', '2.5L 4-cylinder', 'Automatic', 'Front-Wheel Drive', 'Red');

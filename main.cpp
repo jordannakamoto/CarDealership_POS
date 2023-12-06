@@ -22,12 +22,17 @@
 #include <wx/listbox.h> // Add this line to include ListBox header
 #include <wx/colour.h>
 #include <wx/button.h>
+#include <wx/stdpaths.h>
+#include <wx/filename.h>
+#include <wx/image.h>
+
 #include <iostream>
 #include <mysqlx/xdevapi.h>
 
 #include "./Functions/Read/Employee/employee.h"
 #include "./Functions/Read/Customer/customer.h"
 #include "./Functions/Read/Vehicle/vehicle.h"
+#include "./Functions/Read/Options/options.h"
 
 #include "./Functions/Create/Sale/sale.h"
 #include "./Functions/Read/Sale/sale.h"
@@ -91,7 +96,7 @@ wxIMPLEMENT_APP(MyApp); // start up wxWidgets
 
 // 1. Main UI Canvas Frame Constructor - wxWidgets 
 bool MyApp::OnInit() {
-    MyFrame *frame = new MyFrame("Car Dealership App", wxDefaultPosition, wxSize(900, 450));
+    MyFrame *frame = new MyFrame("Car Dealership App", wxDefaultPosition, wxSize(900, 650));
     frame->Show(true);
     return true;
 }
@@ -101,7 +106,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
     
 
-    mainPanel = new wxPanel(this);
+    mainPanel = new wxPanel(this, wxID_ANY);
+
+    vbox->Add( 0, 60);
     vbox->Add(mainPanel, 1, wxEXPAND);
     Bind(wxEVT_SIZE, &MyFrame::OnResize, this);
 
@@ -113,6 +120,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 }
 
 // 2. Database Connection
+// MYSQLCPPCONNECTOR
 void MyFrame::ConnectToDatabase() {
     wxString username = wxGetTextFromUser("Enter your MySQL username:", "MySQL Username", "root");
     wxString password = wxGetPasswordFromUser("Enter your MySQL password:", "MySQL Password");
@@ -139,10 +147,31 @@ void MyFrame::ConnectToDatabase() {
 
 // 3. First Paint of UI and its elements
 void MyFrame::CreateNewView() {
+    wxInitAllImageHandlers();
+
     // Clear the main panel to prepare for the new view
     mainPanel->DestroyChildren();  // Clear any existing children
 
-    // Use a horizontal sizer to layout menu and grid side by side
+    // Use a vertical sizer to layout elements vertically
+    wxBoxSizer* vSizer = new wxBoxSizer(wxVERTICAL);
+
+    // Create the branded header
+    wxPanel* headerPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(200, 60));
+
+
+    // Load and display the image
+    wxString exePath = wxStandardPaths::Get().GetExecutablePath();
+    wxString imagePath = wxFileName(exePath).GetPath() + wxFileName::GetPathSeparator() + "Assets" + wxFileName::GetPathSeparator() + "logo2.png";
+
+    wxStaticBitmap* logoStaticBitmap = new wxStaticBitmap(headerPanel, wxID_ANY, wxBitmap(imagePath, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(200, 60));
+
+    // Create a sizer for the header panel
+    wxBoxSizer* headerSizer = new wxBoxSizer(wxHORIZONTAL);
+    headerSizer->Add(logoStaticBitmap, 0, wxALL, 5);
+
+    
+
+    // Create a horizontal sizer for the menu and grid
     wxBoxSizer* hSizer = new wxBoxSizer(wxHORIZONTAL);
 
     // Create and add the menu list to the horizontal sizer
@@ -151,6 +180,8 @@ void MyFrame::CreateNewView() {
     menuList->Append("Employees");
     menuList->Append("Customers");
     menuList->Append("Vehicles");
+    menuList->Append(" - Options");
+    menuList->Append("Inventory");
     menuList->Bind(wxEVT_LISTBOX, &MyFrame::OnMenuSelect, this);
     hSizer->Add(menuList, 0, wxEXPAND | wxALL, 5);
 
@@ -160,9 +191,13 @@ void MyFrame::CreateNewView() {
 
     hSizer->Add(grid, 1, wxEXPAND | wxALL, 5);
 
+    // Add the horizontal sizer to the vertical sizer;
+    
+
     mainPanel->SetSizer(hSizer);  // Set the horizontal sizer for the main panel
     mainPanel->Layout();  // Layout the main panel
 
+    headerPanel->Show();
     mainPanel->Show();    // Show the main panel
     this->Layout();       // Update the layout of the frame
     LoadSaleData(mainPanel, session, grid);
@@ -179,6 +214,7 @@ void MyFrame::CreateNewView() {
     PositionAddRowButton(addRowButton);
 }
 
+
 // 4. Left Sidebar Menu and its Options
 void MyFrame::OnMenuSelect(wxCommandEvent& event) {
     selectedOption = menuList->GetStringSelection();
@@ -192,6 +228,8 @@ void MyFrame::OnMenuSelect(wxCommandEvent& event) {
         LoadCustomerData(mainPanel, session, grid);
     } else if (selectedOption == "Vehicles") {
         LoadVehicleData(mainPanel, session, grid);
+    } else if (selectedOption == " - Options") {
+        LoadOptionsData(mainPanel, session, grid);
     }
     grid->AutoSizeColumns();
     grid->Bind(wxEVT_GRID_CELL_RIGHT_CLICK, &MyFrame::OnRightClick, this);

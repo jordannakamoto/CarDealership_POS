@@ -69,6 +69,7 @@ TODO:
 - move authentication to a settings panel
 - make a panel for creating a new sale
 - better UI for information based on its application value. I.E. make the employee name more accessible throughout the UX than their ID or Address.
+- There may be memory leakage.
 
 
 ## Authors

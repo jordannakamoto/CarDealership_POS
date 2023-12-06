@@ -5,7 +5,9 @@
 #include "../../Helpers/helpers.h"
 
 
-void LoadVehicleData(wxPanel* mainPanel, Session* session, wxGrid*& grid) {
+RowResult LoadVehicleData(wxPanel* mainPanel, Session* session, wxGrid*& grid) {
+    RowResult rows;
+    
     if (grid != nullptr) {
         grid->Destroy();
     }
@@ -15,10 +17,9 @@ void LoadVehicleData(wxPanel* mainPanel, Session* session, wxGrid*& grid) {
         Schema schema = session->getSchema("carInventory");
         Table salesTable = schema.getTable("vehicle");
 
-        RowResult rows = salesTable.select("vin", "manufacturer", "model_name", "UNIX_TIMESTAMP(model_year) AS yearTimestamp", "price").execute();
+        rows = salesTable.select("vin", "manufacturer", "model_name", "UNIX_TIMESTAMP(model_year) AS yearTimestamp", "price").execute();
 
         grid = new wxGrid(mainPanel, wxID_ANY, wxDefaultPosition, wxSize(680, 400));
-        grid->EnableEditing(false);
         
         int numRows = rows.count();
         int numCols = 5;
@@ -53,14 +54,45 @@ void LoadVehicleData(wxPanel* mainPanel, Session* session, wxGrid*& grid) {
         }
 
         mainPanel->Layout();
+
+        return rows;
     }
     catch (const mysqlx::Error &err) {
         wxMessageBox(wxString(err.what()), "Error", wxOK | wxICON_ERROR);
+        return rows;
     }
     catch (std::exception &ex) {
         wxMessageBox(wxString(ex.what()), "Exception", wxOK | wxICON_ERROR);
+        return rows;
     }
     catch (const char *ex) {
         wxMessageBox(wxString(ex), "Exception", wxOK | wxICON_ERROR);
+        return rows;
+    }
+}
+
+RowResult LoadVehicleData(Session* session) {
+    RowResult rows;
+
+    try {
+        // Connect to the schema containing the "sale" table
+        Schema schema = session->getSchema("carInventory");
+        Table salesTable = schema.getTable("vehicle");
+
+        rows = salesTable.select("vin", "manufacturer", "model_name", "UNIX_TIMESTAMP(model_year) AS yearTimestamp", "price").execute();
+
+        return rows;
+    }
+    catch (const mysqlx::Error &err) {
+        wxMessageBox(wxString(err.what()), "Error", wxOK | wxICON_ERROR);
+        return rows;
+    }
+    catch (std::exception &ex) {
+        wxMessageBox(wxString(ex.what()), "Exception", wxOK | wxICON_ERROR);
+        return rows;
+    }
+    catch (const char *ex) {
+        wxMessageBox(wxString(ex), "Exception", wxOK | wxICON_ERROR);
+        return rows;
     }
 }

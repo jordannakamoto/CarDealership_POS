@@ -63,3 +63,24 @@ void LoadOptionsData(wxPanel* mainPanel, Session* session, wxGrid*& grid) {
         wxMessageBox(wxString(ex), "Exception", wxOK | wxICON_ERROR);
     }
 }
+
+RowResult LoadOptionsData(Session* session) {
+    RowResult rows;
+    try {
+        // Connect to the schema containing the "Options" table
+        Schema schema = session->getSchema("carInventory");
+        Table optionsTable = schema.getTable("Options");
+
+        rows = optionsTable.select("VIN","Engine", "Transmission", "Drive_Train", "Color")
+            .execute();
+    }
+    catch (const mysqlx::Error& err) {
+        wxMessageBox(wxString(err.what()), "Error", wxOK | wxICON_ERROR);
+    }
+    catch (std::exception& ex) {
+        wxMessageBox(wxString(ex.what()), "Exception", wxOK | wxICON_ERROR);
+    }
+    catch (const char* ex) {
+        wxMessageBox(wxString(ex), "Exception", wxOK | wxICON_ERROR);
+    }
+}

@@ -15,7 +15,6 @@ void LoadCustomerData(wxPanel* mainPanel, Session* session, wxGrid*& grid) {
         RowResult rows = salesTable.select("customer_id", "name", "phone_number", "email", "address").execute();
 
         grid = new wxGrid(mainPanel, wxID_ANY, wxDefaultPosition, wxSize(680, 400));
-        grid->EnableEditing(false);
         
         int numRows = rows.count();
         int numCols = 5;
@@ -36,6 +35,12 @@ void LoadCustomerData(wxPanel* mainPanel, Session* session, wxGrid*& grid) {
             grid->SetCellValue(rowIdx, 3, row[3].get<std::string>());
             grid->SetCellValue(rowIdx, 4, row[4].get<std::string>());
             rowIdx++;
+        }
+
+        for (int row = 0; row < grid->GetNumberRows(); ++row) {
+            for( int col = 0; col < numCols; col++){
+                grid->SetReadOnly(row, col, true);
+            }
         }
 
         // sizer is just the section that the grid gets added to. it contains both the menu and the grid in a parent container

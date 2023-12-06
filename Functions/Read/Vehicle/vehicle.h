@@ -8,6 +8,8 @@
 
 using namespace mysqlx;
 
-void LoadVehicleData(wxPanel* mainPanel, Session* session, wxGrid*& grid);
+RowResult LoadVehicleData(wxPanel* mainPanel, Session* session, wxGrid*& grid);
+RowResult LoadVehicleData(Session* session);
+
 
 #endif // VEHICLE_DATA_LOADER_H

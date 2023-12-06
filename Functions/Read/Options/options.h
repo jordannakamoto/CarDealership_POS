@@ -8,6 +8,8 @@
 using namespace mysqlx;
 
 void LoadOptionsData(wxPanel* mainPanel, mysqlx::Session* session, wxGrid*& grid);
+RowResult LoadOptionsData(Session* session);
+
 
 
 #endif // OPTIONSDATALOADER_H

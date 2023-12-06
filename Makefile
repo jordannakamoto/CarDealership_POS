@@ -19,6 +19,7 @@ SRC = main.cpp \
 	  Functions/Update/Sale/sale.cpp \
 	  Functions/Delete/Sale/sale.cpp \
 	  Functions/Create/Sale/sale.cpp \
+	  Functions/Create/Customer/customer.cpp \
       # Add other .cpp files here
 
 # Define object files from source files

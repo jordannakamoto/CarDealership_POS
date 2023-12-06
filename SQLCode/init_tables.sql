@@ -10,7 +10,7 @@ CREATE TABLE Employee (
 
 -- Create the Customer (Cust) table
 CREATE TABLE Customer (
-    Customer_ID INT PRIMARY KEY,
+    Customer_ID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(255),
     Phone_Number VARCHAR(20),
     Email VARCHAR(255),
@@ -29,7 +29,7 @@ CREATE TABLE Vehicle (
 
 -- Create the Sale table
 CREATE TABLE Sale (
-    Sale_ID INT PRIMARY KEY,
+    Sale_ID INT AUTO_INCREMENT PRIMARY KEY,
     Emp_ID INT,
     Cust_ID INT,
     VIN VARCHAR(17),

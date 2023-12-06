@@ -15,5 +15,12 @@ void CreateSaleRow(Session* session,
                    const std::string& vin, 
                    double price, 
                    const std::string& saleDateString);
+                   
+void MakeNewSale(mysqlx::Session* session,
+                   int empId,
+                   int custId,
+                   const std::string& vin, 
+                   double price, 
+                   const std::string& saleDateString);
 
 #endif // SALE_CREATOR_H

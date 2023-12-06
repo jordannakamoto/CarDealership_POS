@@ -73,7 +73,7 @@ TODO:
 
 ## License
 
-`Project Title` is open source software [licensed as MIT][license].
+Open source software [licensed as MIT][license].
 
 ## Acknowledgments
 

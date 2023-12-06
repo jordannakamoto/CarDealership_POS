@@ -1,6 +1,6 @@
 # Car Dealership App - 355 Databases Project
 
-![GitHub contributors](https://img.shields.io/github/contributers/jordannakamoto/355CarDealership/)
+![GitHub contributors](https://img.shields.io/github/contributors/jordannakamoto/355CarDealership/)
 
 Simple app with a UI that demonstrates a cpp program that interacts local mysql database.
 
@@ -40,10 +40,10 @@ Note: Makefile is also using clang c++ compiler which is default on M1 Mac.
 	355CARDEALERSHIP
 	├── Assets     - png logo image
 	└── Functions  - CRUD mysql functions
-  └── SQLCode    - Plain .sql files to copy and paste into mysql cli in order to setup initial data
-  app            - compiled program
-  main.cpp       - main program, setup and draw UI, connect to mysql
-  Makefile       - for compiling and building
+        └── SQLCode    - Plain .sql files to copy and paste into mysql cli in order to setup initial data
+        app            - compiled program
+        main.cpp       - main program, setup and draw UI, connect to mysql
+        Makefile       - for compiling and building
 ```
 
 ## Running the App

@@ -33,6 +33,7 @@
 #include "./Functions/Read/Customer/customer.h"
 #include "./Functions/Read/Vehicle/vehicle.h"
 #include "./Functions/Read/Options/options.h"
+#include "./Functions/Read/Inventory/inventory.h"
 
 #include "./Functions/Create/Sale/sale.h"
 #include "./Functions/Read/Sale/sale.h"
@@ -230,6 +231,9 @@ void MyFrame::OnMenuSelect(wxCommandEvent& event) {
         LoadVehicleData(mainPanel, session, grid);
     } else if (selectedOption == " - Options") {
         LoadOptionsData(mainPanel, session, grid);
+    }
+    else if (selectedOption == "Inventory") {
+        LoadInventoryData(mainPanel, session, grid);
     }
     grid->AutoSizeColumns();
     grid->Bind(wxEVT_GRID_CELL_RIGHT_CLICK, &MyFrame::OnRightClick, this);

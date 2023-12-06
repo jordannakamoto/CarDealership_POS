@@ -1,12 +1,12 @@
 INSERT INTO Employee (Employee_ID, Name, Make_Responsible, Phone_Number, Email, Address) VALUES
-(1, 'John Doe', 'Honda', '555-0100', 'john.doe@email.com', '1234 Main St'),
-(2, 'Jane Smith', 'Toyota', '555-0101', 'jane.smith@email.com', '1235 Main St'),
-(3, 'Emily Johnson', 'Ford', '555-0102', 'emily.johnson@email.com', '1236 Main St');
+(1, 'John Doe', 'Honda', '707-775-0190', 'john.doe@email.com', '234 Main St'),
+(2, 'Jane Smith', 'Toyota', '510-424-2127', 'jane.smith@email.com', '4 21st St'),
+(3, 'Emily Johnson', 'Ford', '707-555-0102', 'emily.johnson@email.com', '424 Sunset Blvd.');
 
 INSERT INTO Customer (Customer_ID, Name, Phone_Number, Email, Address) VALUES
-(101, 'Alice Brown', '555-0200', 'alice.brown@email.com', '5678 Park Ave'),
-(102, 'Bob Green', '555-0201', 'bob.green@email.com', '5679 Park Ave'),
-(103, 'Charlie Black', '555-0202', 'charlie.black@email.com', '5680 Park Ave');
+(101, 'Alice Brown', '707-555-0200', 'alice.brown@email.com', '5678 Park Ave'),
+(102, 'Bob Green', '415-542-0422', 'bob.green@email.com', '305 Pine Street'),
+(103, 'Charlie Black', '415-125-322', 'charlie.black@email.com', '56 Elm Road');
 
 INSERT INTO Vehicle (VIN, Manufacturer, Model_Name, Model_Year, Price) VALUES
 ('1HGBH41JXMN109186', 'Honda', 'Civic', '2021-01-01', 20000.00),
@@ -20,9 +20,9 @@ INSERT INTO Sale (Sale_ID, Emp_ID, Cust_ID, VIN, Price, Sale_Date) VALUES
 
 INSERT INTO Inventory (Inventory_ID, Quantity_Per_Vehicle, Model_Info)
 VALUES
-    (1, '5', 'Standard model with basic features'),
-    (2, '3', 'Upgraded model with leather seats'),
-    (3, '7', 'Luxury model with advanced technology');
+    (1, '5', 'Honda Standard model with basic features'),
+    (2, '3', 'Toyota Upgraded model with leather seats'),
+    (3, '7', 'Ford Luxury model with advanced technology');
 
 INSERT INTO Options (VIN, Engine, Transmission, Drive_Train, Color)
 VALUES

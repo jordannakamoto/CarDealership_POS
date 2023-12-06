@@ -15,6 +15,7 @@ SRC = main.cpp \
 	  Functions/Read/Vehicle/vehicle.cpp \
 	  Functions/Read/Customer/customer.cpp \
 	  Functions/Read/Options/options.cpp \
+	  Functions/Read/Inventory/inventory.cpp \
 	  Functions/Update/Sale/sale.cpp \
 	  Functions/Delete/Sale/sale.cpp \
 	  Functions/Create/Sale/sale.cpp \

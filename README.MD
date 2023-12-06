@@ -67,9 +67,12 @@ Intended basic functionality is implemented for the sale data type. For other da
 
 TODO:
 - move authentication to a settings panel
-- make a panel for creating a new sale
+- validation and error reporting
 - better UI for information based on its application value. I.E. make the employee name more accessible throughout the UX than their ID or Address.
-- There may be memory leakage.
+	- most simply links between pages.
+- There may be memory leakage. program object lifespan isn't really clear.
+- Reactoring main.cpp
+- Encapsulating program objects.
 
 
 ## Authors

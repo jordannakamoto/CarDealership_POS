@@ -2,8 +2,9 @@
 
 ![GitHub contributors](https://img.shields.io/github/stars/jordannakamoto/355CarDealership?style=social)
 
-
 Simple app with a UI that demonstrates a cpp program that interacts local mysql database.
+
+![Screenshot](https://i.ibb.co/hd2ds9z/Screenshot-2023-12-05-at-10-56-19-PM.png)
 
 ## Table of Contents
 - [Car Dealership App - 355 Databases Project](#car-dealership-app---355-databases-project)

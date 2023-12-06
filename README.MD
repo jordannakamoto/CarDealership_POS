@@ -1,6 +1,7 @@
 # Car Dealership App - 355 Databases Project
 
-![GitHub contributors](https://img.shields.io/github/contributors/jordannakamoto/355CarDealership/)
+![GitHub contributors](https://img.shields.io/github/contributors/jordannakamoto/355CarDealership)
+
 
 Simple app with a UI that demonstrates a cpp program that interacts local mysql database.
 

@@ -24,17 +24,20 @@ If you haven't installed mysql locally, please do so. Additionally, I am using m
 Clone GitHub project and install dependency libraries on your computer.
 
 For mysql-cpp data interface:
-1. Setup Oracle mysqlcppconnector
+1. Setup Oracle mysqlcppconnector. On Mac you can just download and run an installer.
 https://github.com/mysql/mysql-connector-cpp
 
-2. Connect the CPP linker to the library locations in the makefile. Current setup is for M1 Macbook Air filesystem
-   - using lmysqlcppconn8 - version 8 of the connector
+2. Connect the CPP linker to the mysqlcppconn library locations in the Makefile. Current setup is for M1 Macbook Air filesystem
    - two source directories must be linked by their path from download location to the compiler
+   - using lmysqlcppconn8 - version 8 of the connector
+   - we utilize the library through #include <mysqlx/xdevapi.h>
+   - xDevAPI Docs: https://dev.mysql.com/doc/dev/connector-cpp/latest/group__devapi.html
 
 3. Download http://wxwidgets.org, the GUI library.
   - on MacOSX this is most easily done through Homebrew Package Manager
   - once again, this library has been linked in the Makefile for building on M1 Mac filesystem as documented here:
   - https://wiki.wxwidgets.org/Wx-Config
+  - tutorial: https://www.youtube.com/watch?v=kPB5Y6ef9dw&list=PL0qQTroQZs5suCJzJYndeBQjLZ4T6q_H-
 
 Note: Makefile is also using clang c++ compiler which is default on M1 Mac.
 

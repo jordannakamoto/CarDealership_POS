@@ -1,4 +1,4 @@
-# Car Dealership App - 355 Databases Project
+# Car Dealership App - Databases Project
 
 ![GitHub contributors](https://img.shields.io/github/stars/jordannakamoto/355CarDealership?style=social)
 

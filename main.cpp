@@ -189,7 +189,7 @@ void MyFrame::ConnectToDatabase() {
     }
     }
     else{
-        wxString connectionString = "mysqlx://root:benedict232@127.0.0.1";
+        wxString connectionString = "mysqlx:<YOUR CREDENTIALS HERE>@127.0.0.1";
         session = new Session(connectionString.ToStdString());
         mainPanel->Show(); // Show the main panel after successful connection
         CreateNewView();   // Create and show the new view

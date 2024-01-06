@@ -6,16 +6,13 @@ Simple app with a native Desktop UI that demonstrates a cpp program that interac
 
 ![Screenshot](https://i.ibb.co/hd2ds9z/Screenshot-2023-12-05-at-10-56-19-PM.png)
 
-## Table of Contents
-- [Car Dealership App - 355 Databases Project](#car-dealership-app---355-databases-project)
-  - [Table of Contents](#table-of-contents)
-  - [Getting Started / Installation](#getting-started--installation)
-  - [Running the App](#running-the-app)
-  - [Development](#development)
-  - [Authors](#authors)
-      - [Jordan Nakamoto](#jordan-nakamoto)
-  - [License](#license)
-  - [Acknowledgments](#acknowledgments)
+## Built With
+
+![wxWidgets](https://img.shields.io/badge/wxWidgets-0DBD8B?style=for-the-badge&logo=element&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white)
+
+
 
 ## Getting Started / Installation
 
